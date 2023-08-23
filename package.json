@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.19",
+    "@mantine/form": "^6.0.19",
+    "@mantine/hooks": "^6.0.19",
     "@shyft-to/js": "^0.2.20",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.34",

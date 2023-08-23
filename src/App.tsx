@@ -8,13 +8,15 @@ import { ShyftSdk, Network } from '@shyft-to/js';
 
 import ShowBalance from './ShowBalance'
 
-import './App.css';
 import '@solana/wallet-adapter-react-ui/styles.css';
+import { MantineProvider } from '@mantine/core';
 
 const App: FC = () => {
     return (
         <Context>
-            <Content />
+            <MantineProvider withGlobalStyles withNormalizeCSS>
+                <Content />
+            </MantineProvider>
         </Context>
     );
 };
