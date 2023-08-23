@@ -9,7 +9,7 @@ import { ShyftSdk, Network } from '@shyft-to/js';
 import ShowBalance from './ShowBalance'
 
 import '@solana/wallet-adapter-react-ui/styles.css';
-import { MantineProvider } from '@mantine/core';
+import {MantineProvider, Text} from '@mantine/core';
 
 const App: FC = () => {
     return (
@@ -46,11 +46,12 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 
 const Content: FC = () => {
     const { publicKey } = useWallet();
-    const shyft = new ShyftSdk({ apiKey: "API_KEY", network: Network.Devnet });
+    const shyft = new ShyftSdk({ apiKey: import.meta.env.VITE_API_KEY, network: Network.Devnet });
     const [ balance, setBalance ] = useState<number>(-1);
 
     useEffect(() => {
         const fetchBalance = async () => {
+            if (!publicKey) return;
             const bal = await shyft.wallet.getBalance({ wallet: publicKey!.toBase58() });
             setBalance(bal);
         };
@@ -63,7 +64,7 @@ const Content: FC = () => {
             <WalletMultiButton />
             {
             !publicKey 
-                ? <p>Not Connected</p> 
+                ? <Text>Not Connected</Text>
                 : <ShowBalance balance={balance} />
             }
         </div>
