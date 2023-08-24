@@ -1,7 +1,7 @@
 import {Group, Loader, Text} from "@mantine/core";
 import {useWallet} from "@solana/wallet-adapter-react";
 import {useEffect, useState} from "react";
-import {shyft} from "./ShyftUtil.ts";
+import {shyft} from "./util/ShyftUtil.ts";
 
 function FetchBalance() {
     const {publicKey} = useWallet();
