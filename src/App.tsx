@@ -1,28 +1,27 @@
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react';
-import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
-import { FC, ReactNode, useMemo, useState, useEffect } from 'react';
+import {WalletAdapterNetwork} from '@solana/wallet-adapter-base';
+import {ConnectionProvider, WalletProvider} from '@solana/wallet-adapter-react';
+import {WalletModalProvider, WalletMultiButton} from '@solana/wallet-adapter-react-ui';
+import {clusterApiUrl} from '@solana/web3.js';
+import {FC, ReactNode, useMemo} from 'react';
 
-import { ShyftSdk, Network } from '@shyft-to/js';
-
-import ShowBalance from './ShowBalance'
+import FetchBalance from './ShowBalance'
 
 import '@solana/wallet-adapter-react-ui/styles.css';
-import {MantineProvider, Text} from '@mantine/core';
+import {MantineProvider} from '@mantine/core';
+import {CreateMarketplaceButton} from "./CreateMarketplace.tsx";
 
 const App: FC = () => {
     return (
         <Context>
             <MantineProvider withGlobalStyles withNormalizeCSS>
-                <Content />
+                <Content/>
             </MantineProvider>
         </Context>
     );
 };
 export default App;
 
-const Context: FC<{ children: ReactNode }> = ({ children }) => {
+const Context: FC<{ children: ReactNode }> = ({children}) => {
     // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
     const network = WalletAdapterNetwork.Devnet;
 
@@ -45,28 +44,11 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Content: FC = () => {
-    const { publicKey } = useWallet();
-    const shyft = new ShyftSdk({ apiKey: import.meta.env.VITE_API_KEY, network: Network.Devnet });
-    const [ balance, setBalance ] = useState<number>(-1);
-
-    useEffect(() => {
-        const fetchBalance = async () => {
-            if (!publicKey) return;
-            const bal = await shyft.wallet.getBalance({ wallet: publicKey!.toBase58() });
-            setBalance(bal);
-        };
-
-        fetchBalance().catch(console.error);
-    }, [shyft.wallet, publicKey]);
-
     return (
         <div className="App">
-            <WalletMultiButton />
-            {
-            !publicKey 
-                ? <Text>Not Connected</Text>
-                : <ShowBalance balance={balance} />
-            }
+            <WalletMultiButton/>
+            <FetchBalance/>
+            <CreateMarketplaceButton />
         </div>
     );
 };
