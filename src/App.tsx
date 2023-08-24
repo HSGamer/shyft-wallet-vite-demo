@@ -1,5 +1,5 @@
 import {WalletAdapterNetwork} from '@solana/wallet-adapter-base';
-import {ConnectionProvider, WalletProvider} from '@solana/wallet-adapter-react';
+import {ConnectionProvider, useWallet, WalletProvider} from '@solana/wallet-adapter-react';
 import {WalletModalProvider, WalletMultiButton} from '@solana/wallet-adapter-react-ui';
 import {clusterApiUrl} from '@solana/web3.js';
 import {FC, ReactNode, useMemo} from 'react';
@@ -7,8 +7,9 @@ import {FC, ReactNode, useMemo} from 'react';
 import FetchBalance from './ShowBalance'
 
 import '@solana/wallet-adapter-react-ui/styles.css';
-import {MantineProvider} from '@mantine/core';
+import {MantineProvider, Text} from '@mantine/core';
 import {CreateMarketplaceButton} from "./CreateMarketplace.tsx";
+import {ShowWallet} from "./ShowWallet.tsx";
 
 const App: FC = () => {
     return (
@@ -44,11 +45,18 @@ const Context: FC<{ children: ReactNode }> = ({children}) => {
 };
 
 const Content: FC = () => {
+    const {publicKey} = useWallet();
+
     return (
         <div className="App">
             <WalletMultiButton/>
-            <FetchBalance/>
-            <CreateMarketplaceButton />
+            {
+                !publicKey ? <Text>Not connected</Text> : <>
+                    <ShowWallet />
+                    <FetchBalance/>
+                    <CreateMarketplaceButton/>
+                </>
+            }
         </div>
     );
 };

@@ -1,45 +1,33 @@
-import { Loader, Text } from "@mantine/core";
+import {Group, Loader, Text} from "@mantine/core";
 import {useWallet} from "@solana/wallet-adapter-react";
 import {useEffect, useState} from "react";
 import {shyft} from "./ShyftUtil.ts";
 
-type BalanceProps = {
-    balance: number
-}
-
-function ShowBalance(balanceProps: BalanceProps) {
-    return <div>
-        {
-            balanceProps.balance < 0
-                ? (
-                    <Loader />
-                )
-                : (
-                    <Text>Balance: {balanceProps.balance}</Text>
-                )
-        }
-    </div>
-}
-
 function FetchBalance() {
-    const { publicKey } = useWallet();
-    const [ balance, setBalance ] = useState<number>(-1);
+    const {publicKey} = useWallet();
+    const [balance, setBalance] = useState<number>(-1);
 
     useEffect(() => {
         const fetchBalance = async () => {
             if (!publicKey) return;
-            const bal = await shyft.wallet.getBalance({ wallet: publicKey!.toBase58() });
+            const bal = await shyft.wallet.getBalance({wallet: publicKey!.toBase58()});
             setBalance(bal);
         };
 
         fetchBalance().catch(console.error);
     }, [publicKey]);
 
-    return (
-        !publicKey
-            ? <Text>Not Connected</Text>
-            : <ShowBalance balance={balance} />
-    )
+    return <Group>
+        {
+            balance < 0
+                ? (
+                    <Loader/>
+                )
+                : (
+                    <Text>Balance: {balance}</Text>
+                )
+        }
+    </Group>
 }
 
 export default FetchBalance;
